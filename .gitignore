@@ -1,0 +1,11 @@
+ffmpeg-4.4-amd64-static
+pretrained_weights
+output
+**/__pycache__/
+MODNet/outdir
+animations
+static/source_backgroud
+static/source_image
+assets/driven_video
+assets/driven_audios
+assets/test_imgs
