@@ -14,7 +14,7 @@ Create conda environment (Recommended):
 Install packages with `pip`
 ```bash
   pip install -r requirements.txt
-
+```
 
 ### Download pretrained weights
 ```shell
