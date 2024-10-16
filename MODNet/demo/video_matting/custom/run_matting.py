@@ -81,15 +81,14 @@ class Modnet:
                 matte_tensor = matte_tensor.repeat(1, 3, 1, 1)
                 matte_np = matte_tensor[0].data.cpu().numpy().transpose(1, 2, 0)
                 
-                
                 alpha_channel = (matte_np * 255).astype(np.uint8)
-                rgba_image = np.zeros((matte_np.shape[0], matte_np.shape[1], 4), dtype=np.uint8)
-                rgba_image[:, :, :3] = frame_np
-                rgba_image[:, :, 3] = alpha_channel[:, :, 0]
-                # 保存为 PNG 图像
+
+                rgba_image = np.dstack((frame_np, alpha_channel[:, :, 0]))
+                
+                # save as png sequences
                 output_path = os.path.join(self.foreground_dir, f"frame_{c:06d}.png")
                 Image.fromarray(rgba_image).save(output_path)
-                # 读取下一帧
+                # read next frame
                 rval, frame = vc.read()
                 c += 1
                 t.update(1)
