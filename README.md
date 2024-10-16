@@ -1,4 +1,4 @@
-<h1 align='center'>LianxiangAvatar</h1>
+<h1 align='center'>🤖LianxiangAvatar</h1>
 
 ## Updates
 - [2024.10.16] release the first version of lianxiang_avatar
