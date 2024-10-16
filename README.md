@@ -1,6 +1,9 @@
 <h1 align='center'>LianxiangAvatar</h1>
+
 ## Updates
 - [2024.10.16] release the first version of lianxiang_avatar
+
+
 ## Installtion
 Create conda environment (Recommended):
 ```bash
@@ -11,6 +14,7 @@ Create conda environment (Recommended):
 Install packages with `pip`
 ```bash
   pip install -r requirements.txt
+
 
 ### Download pretrained weights
 ```shell
