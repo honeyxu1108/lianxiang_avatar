@@ -66,7 +66,10 @@ class Final_process:
         composite_clip = composite_clip.set_audio(audio_clip)
 
         # Save the composite video file
-        composite_clip.write_videofile(output_video_path, codec='libx264', fps=fps)
+        composite_clip.write_videofile(output_video_path, 
+                                       codec='libx264',
+                                       bitrate="20000k",
+                                       fps=fps)
         
         # clear the temple files
         self.delete_all_files_in_folder(foreground_dir)

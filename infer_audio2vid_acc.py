@@ -246,13 +246,13 @@ class EchoMimic_LivePortrait:
             r_pad_crop = int((re - rb) * args.facecrop_dilation_ratio)
             c_pad_crop = int((ce - cb) * args.facecrop_dilation_ratio)
             crop_rect = [max(0, cb - c_pad_crop), max(0, rb - r_pad_crop), min(ce + c_pad_crop, face_img.shape[1]), min(re + c_pad_crop, face_img.shape[0])]
-            print(crop_rect)
+            # print(crop_rect)
             face_img, cord = crop_and_pad(face_img, crop_rect)
             face_mask, _ = crop_and_pad(face_mask, crop_rect)
             fix_x = cord[0]
             fix_y = cord[1]
             side_length = cord[2] - cord[0]
-            print(fix_x, fix_y, side_length)
+            # print(fix_x, fix_y, side_length)
             face_img = cv2.resize(face_img, (args.W, args.H))
             face_mask = cv2.resize(face_mask, (args.W, args.H))
 

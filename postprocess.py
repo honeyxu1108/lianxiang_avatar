@@ -58,6 +58,6 @@ def capture_first_frame(video_path, output_path):
     # execute 
     try:  
         subprocess.run(command, check=True)  
-        print(f"成功截取第一帧并保存到 {output_path}")  
+        print(f"get the first frame and save to: {output_path}")  
     except subprocess.CalledProcessError as e:  
-        print(f"发生错误：{e}")  
+        print(f"some error：{e}")  
