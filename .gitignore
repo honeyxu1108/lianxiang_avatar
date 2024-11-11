@@ -9,3 +9,5 @@ static/source_image
 assets/driven_video
 assets/driven_audios
 assets/test_imgs
+*.zip
+*.mp4

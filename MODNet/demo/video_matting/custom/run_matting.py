@@ -33,7 +33,7 @@ class Modnet:
                 transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
             ]
         )
-
+    
     def gen_video_without_green(self, output_vid_path):
         if not os.path.exists(output_vid_path):
             print('Cannot find the input video: {0}'.format(output_vid_path))
@@ -80,8 +80,16 @@ class Modnet:
 
                 matte_tensor = matte_tensor.repeat(1, 3, 1, 1)
                 matte_np = matte_tensor[0].data.cpu().numpy().transpose(1, 2, 0)
-                
-                alpha_channel = (matte_np * 255).astype(np.uint8)
+
+                # Convert the three-channel image to a grayscale image
+                gray_image = cv2.cvtColor(matte_np, cv2.COLOR_BGR2GRAY)
+                kernel = np.ones((5, 5), np.uint8)  # 5x5 square structuring element
+                # Perform erosion
+                eroded_image = cv2.erode(gray_image, kernel, iterations=1)
+                # If you want to convert the result back to a three-channel image
+                dilated_image_3ch = np.stack([eroded_image]*3, axis=-1)
+
+                alpha_channel = (dilated_image_3ch * 255).astype(np.uint8)
 
                 rgba_image = np.dstack((frame_np, alpha_channel[:, :, 0]))
                 
