@@ -16,6 +16,7 @@ import torch
 from diffusers import AutoencoderKL, DDIMScheduler
 from omegaconf import OmegaConf
 from PIL import Image
+from moviepy.editor import VideoFileClip, AudioFileClip, concatenate_videoclips
 
 from src.models.unet_2d_condition import UNet2DConditionModel
 from src.models.unet_3d_echo import EchoUNet3DConditionModel
@@ -195,13 +196,9 @@ class EchoMimic_LivePortrait:
         ref_vid_path = self.ref_vid_path
         audio_path = self.audio_path
         new_audio_path = "./assets/test_audios/audio.WAV"
-        new_ref_vid_path = "./assets/driven_video/video_24fps.mp4"
-        
-        if os.path.exists(new_ref_vid_path):  
-            os.remove(new_ref_vid_path)
-        cmd = f"ffmpeg -i {ref_vid_path} -vf fps=24 {new_ref_vid_path}"
-        self.run_ffmpeg_command(cmd)
-        
+        new_ref_vid_path_pre = "./assets/driven_video/video_24fps.mp4"
+        new_ref_vid_path = "./assets/driven_video/video_final.mp4"
+
         cmd = "ffmpeg -f lavfi -i anullsrc=r=44100:cl=stereo -t 1 ./silence.wav"
         self.run_ffmpeg_command(cmd)
         
@@ -212,7 +209,34 @@ class EchoMimic_LivePortrait:
         
         if os.path.exists("./silence.wav"):
             os.remove("./silence.wav")
-            
+        
+        if os.path.exists(new_ref_vid_path_pre):  
+            os.remove(new_ref_vid_path_pre)
+        cmd = f"ffmpeg -i {ref_vid_path} -vf fps=24 {new_ref_vid_path_pre}"
+        self.run_ffmpeg_command(cmd)
+
+        # Load the video and audio files
+        video_clip = VideoFileClip(new_ref_vid_path_pre)
+        audio_clip = AudioFileClip(new_audio_path)
+
+        # Get the duration of the audio
+        audio_duration = audio_clip.duration
+
+        # Get the duration of the video
+        video_duration = video_clip.duration
+
+        # Calculate the number of times the video needs to be repeated
+        num_repeats = int(audio_duration // video_duration) + 1
+
+        # Repeat the video clip
+        extended_video = concatenate_videoclips([video_clip] * num_repeats)
+
+        # Trim the video to match the audio duration
+        final_video = extended_video.subclip(0, audio_duration)
+
+        # Save the final video file
+        final_video.write_videofile(new_ref_vid_path, codec="libx264", fps=24)
+
         if args.seed is not None and args.seed > -1:
             generator = torch.manual_seed(args.seed)
         else:
@@ -298,3 +322,9 @@ class EchoMimic_LivePortrait:
         fps = 24
         final = Final_process()
         final.composite_images(output_vid_path, foreground_dir, new_audio_path, background_path, scale, position, video_save_path, fps)
+        
+        # Close the video and audio files
+        video_clip.close()
+        audio_clip.close()
+        if os.path.exists(new_ref_vid_path):
+            os.remove(new_ref_vid_path)

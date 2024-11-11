@@ -2,7 +2,7 @@ from infer_audio2vid_acc import EchoMimic_LivePortrait
 import torch
 
 def main():
-    ref_vid_path = "./assets/driven_video/lianxiang_demo_24fps.mp4"
+    ref_vid_path = "./assets/driven_video/5s.mp4"
     audio_path = "./assets/test_audios/hello.WAV"
     video_save_path = "modified_video_vscode.mp4"
     background_path = "./static/source_backgroud/lianxiang.jpg"
