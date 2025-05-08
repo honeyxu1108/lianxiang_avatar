@@ -30,13 +30,14 @@ from live_portrait import LivePortrait
 from lianxiang_avatar import Final_process
 
 class EchoMimic_LivePortrait:
-    def __init__(self, ref_vid_path, audio_path, video_save_path, background_path, scale, position):
+    def __init__(self, ref_vid_path, audio_path, video_save_path, background_path, scale, position, sp):
         self.ref_vid_path = ref_vid_path
         self.audio_path = audio_path
         self.video_save_path = video_save_path
         self.background_path = background_path
         self.scale = scale
         self.position = position
+        self.sp = sp
     
     ffmpeg_path = os.getenv('FFMPEG_PATH')
     if ffmpeg_path is None and platform.system() in ['Linux', 'Darwin']:
@@ -98,7 +99,7 @@ class EchoMimic_LivePortrait:
         try:  
             subprocess.run(cmd, shell=True, check=True)  
         except subprocess.CalledProcessError as e:  
-            print(f"Error executing command: {e}")  
+            print(f"Error executing command: {e}")
 
     def main(self):
         args = self.parse_args()
@@ -322,9 +323,13 @@ class EchoMimic_LivePortrait:
         fps = 24
         final = Final_process()
         final.composite_images(output_vid_path, foreground_dir, new_audio_path, background_path, scale, position, video_save_path, fps)
-        
+
         # Close the video and audio files
         video_clip.close()
         audio_clip.close()
         if os.path.exists(new_ref_vid_path):
             os.remove(new_ref_vid_path)
+
+        if self.sp:
+            cmd = f'video2x -i {video_save_path} -o {video_save_path[:-4]}_sp.mp4 -f realesrgan -r 4 -m realesr-animevideov3'
+            self.run_ffmpeg_command(cmd)

@@ -11,3 +11,5 @@ assets/driven_audios
 assets/test_imgs
 *.zip
 *.mp4
+.vscode
+assets/driven_video

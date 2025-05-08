@@ -92,6 +92,7 @@ class Modnet:
                 alpha_channel = (dilated_image_3ch * 255).astype(np.uint8)
 
                 rgba_image = np.dstack((frame_np, alpha_channel[:, :, 0]))
+                rgba_image = cv2.resize(rgba_image, (w, h), cv2.INTER_CUBIC)
                 
                 # save as png sequences
                 output_path = os.path.join(self.foreground_dir, f"frame_{c:06d}.png")
