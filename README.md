@@ -41,6 +41,15 @@ The **pretrained_weights** is organized as follows.
 ```
 
 ## SuperResolution Instruction
+### Install
+```
+https://github.com/k4yt3x/video2x/releases
+```
+Download and install the latest released `.AppImage` file
+```
+./xxx.AppImage  # xxx is replaced with the specific version file name
+```
+
 ### Basics
 Use the following command to upscale a video by 4x with RealESRGAN:
 ```
